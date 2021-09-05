@@ -4,9 +4,13 @@ import com.tian.bean.AdminInfo;
 import com.tian.bean.Dog;
 import com.tian.bean.Lover;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +172,75 @@ public class AdminController {
 
     @RequestMapping("/zuoye")
     @ResponseBody
-    public Map zuoye(){
+    public Map zuoye(@RequestBody Map map){
+        System.out.println("map = " + map);
+        Map codeMap=new HashMap();
+        codeMap.put("code", 0);
+        codeMap.put("msg", "访问成功！");
+        codeMap.put("data",map); //返回到前端
+        return codeMap;
+    }
 
+    //以上是前后端分离最新项目用到的知识点 那么也有传统项目 后台负责跳到另一个界面
+    //第一种springmvc 的传值方式 原始方式request+session+request的转发
+    //传统的mvc方法（不返回json数据 不使用@ResponseBody）他要跳转jsp 跳转jsp的方式返回值是string
+    //页面传值 即四大作用域 request session application page
+    @RequestMapping("/yuansheng")
+    public String yuansheng(AdminInfo adminInfo,HttpSession session){
+       // public String yuansheneg(HttpSession session, HttpServletRequest request){
+//       1.session
+        session.setAttribute("adminInfo",adminInfo);
+        //如果登陆成功 要把登录信息放入session作用域
+        System.out.println("原生传值");
+        //2.request
+//        String adminName=request.getParameter("adminName");
+//        String adminPwd=request.getParameter("adminPwd");
+//        request.setAttribute("adminName",adminName);
+//        request.setAttribute("adminPwd",adminPwd);
+        return "home";
+        //3.springmvc的转发
+        //return "forward:/WEB-INF/pages/home.jsp";
+        //4.转发
+        //return "forward:/pages/home";
+        //5.重定向
+        //return "redirect:https://www.baidu.com"; // 不带/ 相对路径
+//        return "redirect:/https://www.baidu.com"; //带/ 绝对路径
+
+    }
+
+    //第二种传值方式
+    @RequestMapping("/modelAndView")
+    public ModelAndView modelAndView(AdminInfo adminInfo){
+        //模型和视图 通俗来说就是数据和显示 可以代替转发功能
+        ModelAndView mv=new ModelAndView();
+        mv.addObject("adminName",adminInfo.getAdminName());
+        mv.addObject("adminPwd",adminInfo.getAdminPwd());
+        System.out.println("以上是模型的绑定 即数据的绑定");
+        mv.setViewName("home");
+        return mv;
+    }
+
+    //第三种传值方式 spring的model
+    @RequestMapping("/model")
+    public String model(AdminInfo adminInfo, Model model){
+        model.addAttribute("adminName",adminInfo.getAdminName());
+        model.addAttribute("adminPwd",adminInfo.getAdminPwd());
+        return "home";
+    }
+
+    //第四种传值方式 modelMap
+    @RequestMapping("/modelMap")
+    public String modelMap(AdminInfo adminInfo, ModelMap modelMap){
+        modelMap.put("adminName",adminInfo.getAdminName());
+        modelMap.put("adminPwd",adminInfo.getAdminPwd());
+        return "home";
+    }
+
+    //第五种传值方式 map比较灵活
+    @RequestMapping("/map")
+    public String map(AdminInfo adminInfo,Map<String,Object> map){
+        map.put("adminName",adminInfo.getAdminName());
+        map.put("adminPwd",adminInfo.getAdminPwd());
+        return "home";
     }
 }

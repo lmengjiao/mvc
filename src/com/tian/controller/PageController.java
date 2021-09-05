@@ -39,4 +39,9 @@ public class PageController {
     public String NongChang(){
         return "NongChang";
     }
+
+    @RequestMapping("/home")
+    public String home(){
+        return "home";
+    }
 }

@@ -4,11 +4,16 @@ import com.tian.bean.AdminInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -248,5 +253,37 @@ public class ZuoYeController {
         map.put("adminName",adminInfo.getAdminName());
         map.put("adminPwd",adminInfo.getAdminPwd());
         return "home";
+    }
+
+    @RequestMapping("/regByBean1")
+    @ResponseBody
+    public String regByBean(AdminInfo adminInfo){
+        Map codeMap=new HashMap();
+        codeMap.put("code",0);
+        codeMap.put("msg","注册成功");
+        return "codeMap";
+    }
+
+    @RequestMapping("/031ajax")
+    @ResponseBody
+    public String ajax031(@RequestParam("ids[]") List<Integer> ids){
+        for (Integer id : ids) {
+            System.out.println("id = " + id);
+        }
+        Map codeMap=new HashMap();
+        codeMap.put("code",0);
+        codeMap.put("msg","成功");
+        codeMap.put("data",ids);
+        return "codeMap";
+    }
+
+    @RequestMapping("/041ajax")
+    @ResponseBody
+    public String ajax041(@RequestBody AdminInfo adminInfo){
+        Map codeMap=new HashMap();
+        codeMap.put("code",0);
+        codeMap.put("msg","成功");
+        codeMap.put("data",adminInfo);
+        return "codeMap";
     }
 }

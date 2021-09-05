@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<form style="height: 500px;width: 350px;border:1px solid deeppink;">
+<form style="height: 310px;width: 350px;">
     <p align="center">我的农场</p>
     <p>农场主id<input type="text" size="5px" value="1">金币：1000</p>
     <p>农场主名称：张三</p>
@@ -42,21 +42,51 @@
             <td><a href="#">购买</a></td>
         </tr>
     </table>
-    <p>购买记录详情<input type="button" value="查看" id="select"></p>
+    <p>购买记录详情<input type="button" value="查看" id="select1"></p>
 </form>
-<script>
-    $("#select").click(function () {
-       var map={
+<table >
 
+    <tr>
+        <td>种子名称</td>
+        <td>购买数量</td>
+        <td>购买时间</td>
+    </tr>
+    <tbody id="farm">
+    <%--<tr>
+        <td name="zzName">
+            <div class="tlist2"></div>
+        </td>
+        <td name="count">
+            <div class="tlist2"></div>
+        </td>
+        <td name="time">
+            <div class="tlist2"></div>
+        </td>
+    </tr>--%>
+    </tbody>
+</table>
+
+<script>
+    $("#select1").click(function () {
+
+        var map={
+            'name':'水稻',
+            'count':'10',
+            'time':'2010-08-27',
         }
+        var trDom=$("<tr><td><div class=\"tlist2\">水稻</div></td><td><div class=\"tlist2\">10</div></td><td><div class=\"tlist2\">2010-08-27</div></td></tr>");  //这叫做构建  jquery的dom元素
+        var trDom=$("<tr><td><div class=\"tlist2\">玉米</div></td><td><div class=\"tlist2\">2</div></td><td><div class=\"tlist2\">2010-08-27</div></td></tr>");  //这叫做构建  jquery的dom元素
+        $('#shuju').append(trDom);  //追加只会在末尾加
+
         $.ajax({
             url:"/api/admin/zuoye",
             type:'post',
-            data:'ss',
+            data:JSON.stringify(map),
             dataType:'json',
             sucess:function (res) {
-                document.write(res)
-            }
+                console.log(res)
+            },
+            contentType:'application/json;charset=UTF-8',
         })
     })
 </script>
